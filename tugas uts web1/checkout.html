@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pemesanan - Toko Buku Online</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    />
+    <style>
+      .checkout-page {
+        background: #f9fafc;
+      }
+
+      .page-header h1 {
+        background: linear-gradient(90deg, #34d399, #059669);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #34d399, #059669);
+        border: none;
+        color: white;
+        transition: 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(135deg, #059669, #34d399);
+        transform: translateY(-1px);
+      }
+
+      .book-select-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: 0.25s;
+        cursor: pointer;
+      }
+
+      .book-select-item:hover {
+        transform: scale(1.01);
+        background: #f1fff7;
+        border: 1px solid #bbf7d0;
+      }
+
+      .book-code {
+        font-size: 13px;
+        color: #6b7280;
+      }
+
+      .book-select-info {
+        text-align: right;
+      }
+
+      .book-select-info .price {
+        font-weight: 600;
+        color: #059669;
+      }
+
+      .cart-item {
+        background: white;
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        border: 1px solid #e5e7eb;
+      }
+
+      .cart-item-name {
+        font-weight: 600;
+        color: #065f46;
+      }
+
+      .cart-summary .total span:last-child {
+        font-weight: 700;
+        color: #047857;
+      }
+
+      .btn-qty {
+        background: #dcfce7;
+        border: none;
+        border-radius: 6px;
+        padding: 2px 8px;
+        cursor: pointer;
+      }
+
+      .btn-qty:hover {
+        background: #bbf7d0;
+      }
+
+      .btn-outline {
+        border: 1px solid #d1fae5;
+        color: #065f46;
+      }
+
+      .btn-outline:hover {
+        background: #ecfdf5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-container checkout-page">
+      <header class="page-header">
+        <div class="header-left">
+          <button class="btn btn-outline" onclick="history.back()">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Kembali
+          </button>
+          <div>
+            <h1>Pemesanan Buku</h1>
+            <p class="subtitle">Pilih buku dan lengkapi informasi pemesanan</p>
+          </div>
+        </div>
+      </header>
+
+      <div class="checkout-grid">
+        <div class="checkout-main">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h3>Pilih Buku</h3>
+              <p>Klik buku untuk menambahkan ke keranjang</p>
+            </div>
+            <div class="card-body">
+              <div id="bookSelection" class="book-selection"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Informasi Pemesan</h3>
+              <p>Lengkapi data untuk pengiriman</p>
+            </div>
+            <div class="card-body">
+              <form id="checkoutForm">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="telepon">Nomor Telepon</label>
+                  <input type="tel" id="telepon" required />
+                </div>
+                <div class="form-group">
+                  <label for="alamat">Alamat Lengkap</label>
+                  <input type="text" id="alamat" required />
+                </div>
+                <div class="form-group">
+                  <label for="pembayaran">Metode Pembayaran</label>
+                  <select id="pembayaran" required>
+                    <option value="">Pilih metode pembayaran</option>
+                    <option value="transfer">Transfer Bank</option>
+                    <option value="cod">COD (Cash on Delivery)</option>
+                    <option value="ewallet">E-Wallet</option>
+                    <option value="cc">Kartu Kredit</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-sidebar">
+          <div class="card sticky">
+            <div class="card-header">
+              <h3>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  style="display: inline-block; vertical-align: middle"
+                >
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path
+                    d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                  ></path>
+                </svg>
+                Keranjang (<span id="cartCount">0</span>)
+              </h3>
+            </div>
+            <div class="card-body">
+              <div id="cartItems" class="cart-items">
+                <p class="empty-cart">Keranjang masih kosong</p>
+              </div>
+
+              <div id="cartSummary" class="cart-summary" style="display: none">
+                <hr />
+                <div class="summary-row">
+                  <span>Subtotal</span>
+                  <span id="subtotal">Rp 0</span>
+                </div>
+                <div class="summary-row">
+                  <span>Ongkir</span>
+                  <span>Rp 0</span>
+                </div>
+                <hr />
+                <div class="summary-row total">
+                  <span>Total</span>
+                  <span id="total">Rp 0</span>
+                </div>
+                <button
+                  class="btn btn-primary btn-block mt-3"
+                  onclick="processOrder()"
+                >
+                  Proses Pesanan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+      checkAuth();
+
+      let cart = [];
+
+      function renderBooks() {
+        const container = document.getElementById("bookSelection");
+        container.innerHTML = dataKatalogBuku
+          .map(
+            (book) => `
+                <div class="book-select-item" onclick='addToCart(${JSON.stringify(
+                  book
+                )})'>
+                    <div>
+                        <h4>${book.namaBarang}</h4>
+                        <p class="book-code">${book.kodeBarang}</p>
+                    </div>
+                    <div class="book-select-info">
+                        <div class="price">${book.harga}</div>
+                        <div class="stock">Stok: ${book.stok}</div>
+                    </div>
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      function addToCart(book) {
+        const existing = cart.find(
+          (item) => item.kodeBarang === book.kodeBarang
+        );
+        if (existing) {
+          existing.quantity++;
+        } else {
+          cart.push({ ...book, quantity: 1 });
+        }
+        updateCart();
+        showAlert("success", `${book.namaBarang} ditambahkan ke keranjang`);
+      }
+
+      function updateQuantity(kodeBarang, change) {
+        const item = cart.find((i) => i.kodeBarang === kodeBarang);
+        if (item) {
+          item.quantity = Math.max(1, item.quantity + change);
+          updateCart();
+        }
+      }
+
+      function removeFromCart(kodeBarang) {
+        cart = cart.filter((item) => item.kodeBarang !== kodeBarang);
+        updateCart();
+        showAlert("success", "Item dihapus dari keranjang");
+      }
+
+      function parsePrice(price) {
+        return parseInt(price.replace(/[^0-9]/g, ""));
+      }
+
+      function formatPrice(number) {
+        return "Rp " + number.toLocaleString("id-ID");
+      }
+
+      function updateCart() {
+        const container = document.getElementById("cartItems");
+        const summary = document.getElementById("cartSummary");
+        const count = document.getElementById("cartCount");
+
+        count.textContent = cart.length;
+
+        if (cart.length === 0) {
+          container.innerHTML =
+            '<p class="empty-cart">Keranjang masih kosong</p>';
+          summary.style.display = "none";
+        } else {
+          container.innerHTML = cart
+            .map(
+              (item) => `
+                    <div class="cart-item">
+                        <div class="cart-item-header">
+                            <span class="cart-item-name">${
+                              item.namaBarang
+                            }</span>
+                            <button class="btn-icon" onclick="removeFromCart('${
+                              item.kodeBarang
+                            }')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="quantity-controls">
+                                <button class="btn-qty" onclick="updateQuantity('${
+                                  item.kodeBarang
+                                }', -1)">−</button>
+                                <span class="qty">${item.quantity}</span>
+                                <button class="btn-qty" onclick="updateQuantity('${
+                                  item.kodeBarang
+                                }', 1)">+</button>
+                            </div>
+                            <span class="cart-item-price">${formatPrice(
+                              parsePrice(item.harga) * item.quantity
+                            )}</span>
+                        </div>
+                    </div>
+                `
+            )
+            .join("");
+
+          const total = cart.reduce(
+            (sum, item) => sum + parsePrice(item.harga) * item.quantity,
+            0
+          );
+          document.getElementById("subtotal").textContent = formatPrice(total);
+          document.getElementById("total").textContent = formatPrice(total);
+          summary.style.display = "block";
+        }
+      }
+
+      function processOrder() {
+        const form = document.getElementById("checkoutForm");
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        if (cart.length === 0) {
+          showAlert("error", "Keranjang masih kosong");
+          return;
+        }
+
+        showAlert("success", "Pesanan berhasil dibuat!");
+        cart = [];
+        updateCart();
+        form.reset();
+      }
+
+      renderBooks();
+    </script>
+  </body>
+</html>

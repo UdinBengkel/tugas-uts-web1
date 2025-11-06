@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Katalog Buku - Toko Buku Online</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f9fbfd;
+        margin: 0;
+      }
+
+      /* HEADER */
+      .page-header {
+        background: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .header-left h1 {
+        font-size: 1.5rem;
+        margin: 0;
+        color: #111827;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: #6b7280;
+        font-size: 0.95rem;
+      }
+
+      .btn {
+        border: none;
+        border-radius: 10px;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: 0.2s;
+      }
+
+      .btn-outline {
+        background: white;
+        border: 1px solid #d1d5db;
+        color: #374151;
+      }
+
+      .btn-outline:hover {
+        background-color: #f3f4f6;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #93c5fd, #3b82f6);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      /* GRID BUKU */
+      .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem;
+        margin: 0 auto;
+        max-width: 1200px;
+      }
+
+      .book-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.25s ease;
+        cursor: pointer;
+      }
+
+      .book-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+      }
+
+      .book-cover img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+      }
+
+      .book-code {
+        font-size: 0.85rem;
+        color: #6b7280;
+        margin-top: 0.5rem;
+      }
+
+      .book-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0.2rem 0;
+      }
+
+      .book-subtitle {
+        font-size: 0.9rem;
+        color: #6b7280;
+        margin-bottom: 0.6rem;
+      }
+
+      .book-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 1rem 1rem;
+      }
+
+      .book-info .label {
+        font-size: 0.8rem;
+        color: #9ca3af;
+      }
+
+      .book-info .value {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #111827;
+      }
+
+      .book-info .value.primary {
+        color: #2563eb;
+      }
+
+      /* CARD TABLE */
+      .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        margin: 2rem auto;
+        max-width: 1200px;
+        overflow: hidden;
+      }
+
+      .card-header {
+        padding: 1.5rem 2rem 1rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .card-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #111827;
+      }
+
+      .card-header p {
+        color: #6b7280;
+        margin: 0.3rem 0 0;
+      }
+
+      .card-body {
+        padding: 1.5rem 2rem;
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .data-table th,
+      .data-table td {
+        text-align: left;
+        padding: 0.8rem 1rem;
+      }
+
+      .data-table thead {
+        background-color: #f3f4f6;
+      }
+
+      .data-table th {
+        color: #374151;
+        font-weight: 600;
+      }
+
+      .data-table tr:nth-child(even) {
+        background-color: #f9fafb;
+      }
+
+      .text-right {
+        text-align: right;
+      }
+
+      .font-medium {
+        font-weight: 500;
+      }
+
+      .font-semibold {
+        font-weight: 600;
+      }
+
+      /* MODAL */
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 480px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .modal-body {
+        padding: 1.5rem;
+      }
+
+      .modal-footer {
+        padding: 1rem 1.5rem 1.5rem;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #9ca3af;
+      }
+
+      .modal-close:hover {
+        color: #374151;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-weight: 500;
+        color: #374151;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-family: "Inter", sans-serif;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .btn-block {
+        width: 100%;
+      }
+
+      .mt-4 {
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-container">
+      <header class="page-header">
+        <div class="header-left">
+          <button class="btn btn-outline" onclick="history.back()">
+            ⬅ Kembali
+          </button>
+          <div>
+            <h1>Katalog Buku</h1>
+            <p class="subtitle">Kelola stok dan informasi buku</p>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('addBookModal')">
+          + Tambah Buku
+        </button>
+      </header>
+
+      <div id="bookGrid" class="book-grid"></div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          <h3>Tabel Stok Buku</h3>
+          <p>Daftar lengkap katalog buku</p>
+        </div>
+        <div class="card-body">
+          <div class="table-container">
+            <table id="bookTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Kode</th>
+                  <th>Nama Buku</th>
+                  <th>Jenis</th>
+                  <th>Edisi</th>
+                  <th class="text-right">Stok</th>
+                  <th class="text-right">Harga</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="addBookModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Tambah Buku Baru</h2>
+          <button class="modal-close" onclick="closeModal('addBookModal')">
+            &times;
+          </button>
+        </div>
+        <form id="addBookForm">
+          <div class="modal-body">
+            <p class="modal-description">
+              Masukkan informasi buku yang ingin ditambahkan
+            </p>
+            <div class="form-group">
+              <label for="kodeBarang">Kode Barang</label>
+              <input
+                type="text"
+                id="kodeBarang"
+                placeholder="EKMA4001"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="namaBarang">Nama Buku</label>
+              <input
+                type="text"
+                id="namaBarang"
+                placeholder="Judul Buku"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="edisi">Edisi</label>
+                <input type="text" id="edisi" placeholder="1" required />
+              </div>
+              <div class="form-group">
+                <label for="stok">Stok</label>
+                <input type="number" id="stok" placeholder="100" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="harga">Harga</label>
+              <input type="text" id="harga" placeholder="Rp 150.000" required />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary btn-block">
+              Tambah Buku
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+      checkAuth();
+
+      let books = [...dataKatalogBuku];
+
+      function renderBooks() {
+        const grid = document.getElementById("bookGrid");
+        const tbody = document.querySelector("#bookTable tbody");
+
+        grid.innerHTML = books
+          .map(
+            (book) => `
+            <div class="book-card">
+              <div class="book-cover">
+                <img src="${book.cover}" alt="${book.namaBarang}">
+              </div>
+              <div style="padding: 0.8rem 1rem 1rem;">
+                <div class="book-code">${book.kodeBarang}</div>
+                <h3 class="book-title">${book.namaBarang}</h3>
+                <p class="book-subtitle">Edisi ${book.edisi} • ${book.jenisBarang}</p>
+                <div class="book-info">
+                  <div>
+                    <div class="label">Stok</div>
+                    <div class="value primary">${book.stok}</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="label">Harga</div>
+                    <div class="value">${book.harga}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
+          )
+          .join("");
+
+        tbody.innerHTML = books
+          .map(
+            (book) => `
+              <tr>
+                <td class="font-medium">${book.kodeBarang}</td>
+                <td>${book.namaBarang}</td>
+                <td>${book.jenisBarang}</td>
+                <td>${book.edisi}</td>
+                <td class="text-right font-semibold">${book.stok}</td>
+                <td class="text-right font-semibold">${book.harga}</td>
+              </tr>
+            `
+          )
+          .join("");
+      }
+
+      document
+        .getElementById("addBookForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const newBook = {
+            kodeBarang: document.getElementById("kodeBarang").value,
+            namaBarang: document.getElementById("namaBarang").value,
+            jenisBarang: "Buku Ajar",
+            edisi: document.getElementById("edisi").value,
+            stok: parseInt(document.getElementById("stok").value),
+            harga: document.getElementById("harga").value,
+            cover: "img/default.jpg",
+          };
+
+          books.push(newBook);
+          renderBooks();
+          showAlert("success", "Buku berhasil ditambahkan!");
+          closeModal("addBookModal");
+          this.reset();
+        });
+
+      renderBooks();
+    </script>
+  </body>
+</html>

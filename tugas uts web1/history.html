@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>History Pemesanan</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/data.js"></script>
+    <style>
+      .text-gradient-orange {
+        background: linear-gradient(135deg, #fb923c, #f97316);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-container">
+      <div class="page-header">
+  <div class="header-left" style="display: flex; align-items: center; gap: 12px;">
+    <button class="btn btn-outline" onclick="history.back()">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Kembali
+    </button>
+    <div>
+      <h1 class="page-title text-gradient-orange">Riwayat Pemesanan</h1>
+      <p>Daftar riwayat pemesanan dan pengiriman buku Anda</p>
+    </div>
+  </div>
+</div>
+
+        <div class="card-body table-container">
+          <table class="data-table" id="historyTable">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nomor DO</th>
+                <th>Nama</th>
+                <th>Tanggal Kirim</th>
+                <th>Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tableBody = document.querySelector("#historyTable tbody");
+
+      if (typeof dataTracking !== "undefined") {
+        Object.values(dataTracking).forEach((item, index) => {
+          const tr = document.createElement("tr");
+
+          let statusClass = "";
+          const status = item.status.toLowerCase();
+          if (status.includes("selesai")) {
+            statusClass = "status-success";
+          } else if (status.includes("dalam")) {
+            statusClass = "status-warning";
+          } else {
+            statusClass = "status-warning";
+          }
+
+          tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${item.nomorDO}</td>
+            <td>${item.nama}</td>
+            <td>${item.tanggalKirim}</td>
+            <td>${item.total}</td>
+            <td><span class="status-badge ${statusClass}">${
+            item.status
+          }</span></td>
+          `;
+
+          tr.addEventListener("click", function () {
+            window.location.href = "tracking.html?do=" + item.nomorDO;
+          });
+
+          tableBody.appendChild(tr);
+        });
+      } else {
+        console.error("dataTracking tidak ditemukan!");
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Toko Buku Online</title>
+    <meta
+      name="description"
+      content="Aplikasi pemesanan buku online Universitas Terbuka"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    />
+  </head>
+  <body class="login-page">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-header">
+          <div class="logo-circle">
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path
+                d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+              ></path>
+            </svg>
+          </div>
+          <h1>Toko Buku Online</h1>
+          <p class="subtitle">Masuk ke akun Anda untuk melanjutkan</p>
+        </div>
+
+        <form id="loginForm" class="login-form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="nama@email.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+        </form>
+
+        <div class="login-footer">
+          <button
+            class="btn btn-ghost btn-block"
+            onclick="openModal('forgotModal')"
+          >
+            Lupa Password?
+          </button>
+          <button
+            class="btn btn-outline btn-block"
+            onclick="openModal('registerModal')"
+          >
+            Daftar Akun Baru
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="forgotModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Reset Password</h2>
+          <button class="modal-close" onclick="closeModal('forgotModal')">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-description">
+            Masukkan email Anda untuk menerima link reset password
+          </p>
+          <div class="form-group">
+            <label for="resetEmail">Email</label>
+            <input type="email" id="resetEmail" placeholder="nama@email.com" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary btn-block" onclick="resetPassword()">
+            Kirim Link Reset
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Daftar Akun Baru</h2>
+          <button class="modal-close" onclick="closeModal('registerModal')">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-description">
+            Lengkapi form berikut untuk membuat akun baru
+          </p>
+          <div class="form-group">
+            <label for="regName">Nama Lengkap</label>
+            <input type="text" id="regName" placeholder="Nama Anda" />
+          </div>
+          <div class="form-group">
+            <label for="regEmail">Email</label>
+            <input type="email" id="regEmail" placeholder="nama@email.com" />
+          </div>
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <input type="password" id="regPassword" placeholder="••••••••" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary btn-block" onclick="registerUser()">
+            Daftar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+      // Login form handler
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          const user = dataPengguna.find(
+            (u) => u.email === email && u.password === password
+          );
+
+          if (user) {
+            localStorage.setItem("user", JSON.stringify(user));
+            showAlert("success", `Selamat datang, ${user.nama}!`);
+            setTimeout(() => {
+              window.location.href = "dashboard.html";
+            }, 1000);
+          } else {
+            showAlert("error", "Email atau password yang Anda masukkan salah");
+          }
+        });
+
+      function resetPassword() {
+        const email = document.getElementById("resetEmail").value;
+        if (email) {
+          showAlert(
+            "success",
+            "Link reset password telah dikirim ke email Anda"
+          );
+          closeModal("forgotModal");
+        } else {
+          showAlert("error", "Mohon masukkan email Anda");
+        }
+      }
+
+      function registerUser() {
+        const name = document.getElementById("regName").value;
+        const email = document.getElementById("regEmail").value;
+        const password = document.getElementById("regPassword").value;
+
+        if (name && email && password) {
+          showAlert("success", "Registrasi berhasil! Silakan login");
+          closeModal("registerModal");
+        } else {
+          showAlert("error", "Mohon lengkapi semua field");
+        }
+      }
+    </script>
+  </body>
+</html>
